@@ -11,25 +11,20 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { BaseController } from '../base/base.controller';
 import { BaseService } from '../base/base.service';
 import { PostModel } from './post.model';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('posts')
 @Controller('posts')
-export class PostsController extends BaseController<
-  PostModel,
-  CreatePostDto,
-  UpdatePostDto
-> {
+export class PostsController {
   constructor(
     private readonly postService: BaseService<
       PostModel,
       CreatePostDto,
       UpdatePostDto
     >,
-  ) {
-    super(postService);
-  }
+  ) {}
 
   @Get()
   findAll() {

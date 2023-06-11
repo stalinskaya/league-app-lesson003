@@ -11,7 +11,7 @@ const swaggerSetup = (app: INestApplication) => {
     .addTag('posts')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  SwaggerModule.setup('api', app, document);
 };
 
 async function bootstrap() {

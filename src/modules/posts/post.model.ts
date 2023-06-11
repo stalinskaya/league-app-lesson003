@@ -8,6 +8,10 @@ export type PostDocument = HydratedDocument<PostModel>;
 export class PostModel extends BaseModel {
   @Prop()
   name: string;
+  @Prop()
+  likes: number;
+  @Prop()
+  rate: number;
 }
 
 export const PostSchema = SchemaFactory.createForClass(PostModel);
