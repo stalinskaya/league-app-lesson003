@@ -1,49 +1,59 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { BaseController } from '../base/base.controller';
+import { BaseService } from '../base/base.service';
+import { PostModel } from './post.model';
 
 @Controller('posts')
-export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
-
-  @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+export class PostsController extends BaseController<
+  PostModel,
+  CreatePostDto,
+  UpdatePostDto
+> {
+  constructor(
+    private readonly postService: BaseService<
+      PostModel,
+      CreatePostDto,
+      UpdatePostDto
+    >,
+  ) {
+    super(postService);
   }
 
   @Get()
   findAll() {
-    return this.postsService.findAll();
-  }
-
-  @Get('fake')
-  fake() {
-    return this.postsService.create({
-      name: 'fake',
-    });
+    return this.postService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  findById(@Param('id') id: string) {
+    return this.postService.findOne(id);
+  }
+
+  @Post()
+  create(@Body() createPostDto: CreatePostDto) {
+    return this.postService.create(createPostDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(+id, updatePostDto);
+  update(@Param('id') id: string, @Body() updateDto: UpdatePostDto) {
+    return this.postService.update(id, updateDto);
   }
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+    return this.postService.remove(id);
   }
 }
