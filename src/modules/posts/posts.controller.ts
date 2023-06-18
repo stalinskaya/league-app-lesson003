@@ -48,7 +48,7 @@ export class PostsController {
   ) {
     return this.postService.create({
       name: createPostDto.name,
-      author: await this.authService.me(auth),
+      authorid: (await this.authService.me(auth)).id,
     });
   }
 

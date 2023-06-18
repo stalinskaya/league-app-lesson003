@@ -23,7 +23,7 @@ export class AuthService {
       }
       const userId = decoded._id;
       const user = await this.usersService.findOne(userId);
-      return user.username;
+      return user;
     } else {
       throw new UnauthorizedException('Not authorized');
     }
