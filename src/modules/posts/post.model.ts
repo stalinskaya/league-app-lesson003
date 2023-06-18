@@ -12,6 +12,8 @@ export class PostModel extends BaseModel {
   likes: number;
   @Prop()
   rate: number;
+  @Prop()
+  author: string;
 }
 
 export const PostSchema = SchemaFactory.createForClass(PostModel);

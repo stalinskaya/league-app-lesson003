@@ -8,6 +8,10 @@ export abstract class BaseService<TModel, TCreateDto, TUpdateDto> {
     @InjectModel(BaseModel.name) private readonly baseModel: Model<TModel>,
   ) {}
 
+  async find(filter: any) {
+    return await this.baseModel.find(filter);
+  }
+
   async create(createDto: TCreateDto) {
     const createdModel = new this.baseModel(createDto);
     return await createdModel.save();

@@ -11,10 +11,12 @@ import { UserModel, UserSchema } from './user.model';
   ],
   controllers: [UsersController],
   providers: [
+    UsersService,
     {
       provide: BaseService,
       useClass: UsersService,
     },
   ],
+  exports: [UsersService],
 })
 export class UsersModule {}

@@ -8,12 +8,14 @@ import {
   Param,
   Patch,
   Post,
+  Headers,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { BaseService } from '../base/base.service';
 import { PostModel } from './post.model';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthService } from '../auth/auth.service';
 
 @ApiTags('posts')
 @Controller('posts')
@@ -24,9 +26,11 @@ export class PostsController {
       CreatePostDto,
       UpdatePostDto
     >,
+    private readonly authService: AuthService,
   ) {}
 
   @Get()
+  @ApiBearerAuth()
   findAll() {
     return this.postService.findAll();
   }
@@ -36,9 +40,16 @@ export class PostsController {
     return this.postService.findOne(id);
   }
 
+  @ApiBearerAuth()
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postService.create(createPostDto);
+  async create(
+    @Headers('Authorization') auth: string,
+    @Body() createPostDto: CreatePostDto,
+  ) {
+    return this.postService.create({
+      name: createPostDto.name,
+      author: await this.authService.me(auth),
+    });
   }
 
   @Patch(':id')
