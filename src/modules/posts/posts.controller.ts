@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Headers,
+  UseGuards,
 } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -16,6 +17,7 @@ import { BaseService } from '../base/base.service';
 import { PostModel } from './post.model';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from '../auth/auth.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('posts')
 @Controller('posts')
@@ -40,8 +42,9 @@ export class PostsController {
     return this.postService.findOne(id);
   }
 
-  @ApiBearerAuth()
   @Post()
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   async create(
     @Headers('Authorization') auth: string,
     @Body() createPostDto: CreatePostDto,

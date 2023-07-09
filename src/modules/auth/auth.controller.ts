@@ -1,7 +1,17 @@
-import { Body, Controller, Get, Post, Headers } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Headers,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/AuthDto';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from './auth.guard';
+import { JwtPayload } from './jwt-payload.type';
+import { Requestor } from './requestor.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -9,8 +19,9 @@ export class AuthController {
 
   @Get('me')
   @ApiBearerAuth()
-  me(@Headers('Authorization') auth: string) {
-    return this.authService.me(auth);
+  @UseGuards(AuthGuard)
+  me(@Headers() headers, @Requestor() requestor: JwtPayload) {
+    return requestor;
   }
 
   @Post('register')
